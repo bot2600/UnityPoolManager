@@ -57,7 +57,7 @@ public static class PoolManager
 
     static Dictionary<GameObject, Pool> pools = new Dictionary<GameObject, Pool>();
 
-    static void Init(GameObject prefab, int poolSize = DefaultPoolSize)
+    public static void Init(GameObject prefab, int poolSize = DefaultPoolSize)
     {
         //TODO:lets set the name on the pool to the name of the prefab + "_pool" and try to find its game object in the heirarchy, then add the spawners under it
         if (!pools.ContainsKey(prefab))
@@ -66,14 +66,14 @@ public static class PoolManager
         }
     }
 
-    static public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
+    public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         //INFO: init a pool for this type of prefab if there isn't already one
         Init(prefab);
         return pools[prefab].Spawn(position, rotation);
     }
 
-    static public void Despawn(GameObject gameObject)
+    public static void Despawn(GameObject gameObject)
     {
         var poolMember = gameObject.GetComponent<PoolMember>();
         if (!poolMember)
