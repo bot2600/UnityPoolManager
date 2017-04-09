@@ -8,13 +8,25 @@ public static class PoolManager
     class Pool
     {
         int nextId = 1;
+        int preferredPoolSize;
         Stack<GameObject> inactive;
         GameObject prefabToPool;
+
+        public int Count
+        {
+            get { return inactive.Count; }
+        }
+
+        public Pool(GameObject prefab) : this(prefab, DefaultPoolSize)
+        {
+
+        }
 
         public Pool(GameObject prefab, int poolSize)
         {
             prefabToPool = prefab;
             inactive = new Stack<GameObject>(poolSize);
+            preferredPoolSize = poolSize;
         }
 
         public GameObject Spawn(Vector3 position, Quaternion rotation)
@@ -45,7 +57,12 @@ public static class PoolManager
 
         public void Despawn(GameObject gameObject)
         {
-
+            if (Count >= preferredPoolSize)
+            {
+                GameObject.Destroy(gameObject);
+                return;
+            }
+            gameObject.transform.parent = null;
             gameObject.SetActive(false);
             inactive.Push(gameObject);
         }
